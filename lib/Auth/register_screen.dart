@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_chat_app/models/user_model.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -74,11 +76,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
     FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email, password: password)
       .then((value) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("New User created")));
+        postDetailsToFireStore();
+        
 
       }).catchError((e){
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("User creation failed "+e.toString())));
 
       });
+  }
+  postDetailsToFireStore() async{
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+
+    User? user = FirebaseAuth.instance.currentUser;
+    UserModel userModel = UserModel();
+
+    userModel.uid = user!.uid;
+    userModel.email = user.email;
+    userModel.name = user.email!.split('@')[0];
+
+   await firebaseFirestore.collection("users").doc(user.uid).set(userModel.toMap());
+   
+   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("New User created")));
   }
 }
