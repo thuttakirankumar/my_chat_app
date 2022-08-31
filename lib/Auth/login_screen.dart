@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_chat_app/Auth/register_screen.dart';
+import 'package:my_chat_app/screens/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -54,9 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 5,
             ),
 
-            ElevatedButton(onPressed: (){
-              print("email is ${_emailcontroller.text}");
-            }, child: Text("Login")),
+            ElevatedButton(onPressed: login, child: Text("Login")),
             SizedBox(
               height: 5,
             ),
@@ -69,5 +69,19 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+  login(){
+     String email = _emailcontroller.text;
+    String password = _passwordcontroller.text;
+    FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email, password: password)
+      .then((value) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("logged in successfully")));
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
+
+      }).catchError((e){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("log in failed "+e.toString())));
+
+      });
   }
 }

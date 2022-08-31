@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_chat_app/screens/splash_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -8,6 +10,12 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Home"),
+        actions: [
+          IconButton(onPressed: () async{
+            await FirebaseAuth.instance.signOut();
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>SplashScreen()), (route) => false);
+          }, icon: Icon(Icons.logout) )
+        ],
       ),
       body: Center(child: Text("Welcome to the app"),),
     );

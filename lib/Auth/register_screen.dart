@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -53,9 +54,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               height: 5,
             ),
 
-            ElevatedButton(onPressed: (){
-              print("email is ${_emailcontroller.text}");
-            }, child: Text("Register")),
+            ElevatedButton(onPressed: register, child: Text("Register")),
             SizedBox(
               height: 5,
             ),
@@ -68,5 +67,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+  register(){
+    String email = _emailcontroller.text;
+    String password = _passwordcontroller.text;
+    FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: email, password: password)
+      .then((value) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("New User created")));
+
+      }).catchError((e){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("User creation failed "+e.toString())));
+
+      });
   }
 }
