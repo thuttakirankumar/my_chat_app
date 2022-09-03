@@ -132,6 +132,14 @@ class _ChatScreenState extends State<ChatScreen> {
     MessageModel md = MessageModel();
     md.message = message;
     await collref!.add(md.toMap());
+    
+
+    Map<String,dynamic> roomMap =Map<String,dynamic>();
+    roomMap['lastMessage'] = message;
+    roomMap['timeStamp'] = FieldValue.serverTimestamp();
+
+    FirebaseFirestore.instance.collection("rooms").doc(widget.rooomModel.roomId).update(roomMap);
+
     _controller.clear();
   }
 
