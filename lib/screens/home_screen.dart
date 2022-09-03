@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_chat_app/screens/edit_screen.dart';
+import 'package:my_chat_app/screens/show_users.dart';
 import 'package:my_chat_app/screens/splash_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -22,6 +23,9 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: Center(child: Text("Welcome to the app"),),
+      floatingActionButton: IconButton(onPressed:(){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>ShowListOfUsers()) );
+      } ,icon: Icon(Icons.add) ,),
     );
   }
 }
